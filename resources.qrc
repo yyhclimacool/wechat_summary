@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>AI.ico</file>
+        <file>main.ico</file>
+        <file>wechat.ico</file>
+    </qresource>
+</RCC>
