@@ -2,7 +2,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                               QHBoxLayout, QLabel, QLineEdit, QSpinBox, QPushButton, 
                               QTextEdit, QComboBox, QMessageBox, QTabWidget, 
                               QScrollArea, QFrame, QStackedWidget, QInputDialog, QDialog)
-from PySide6.QtCore import Qt, QSettings, Signal, QThread
+from PySide6.QtCore import Qt, QSettings, Signal, QThread, QTimer
 from PySide6.QtGui import QFont, QPalette, QColor, QIcon
 import sys
 import json
@@ -152,26 +152,9 @@ class AIConfig:
         if not os.path.exists(self.config_dir):
             os.makedirs(self.config_dir)
             
-        # 默认配置
-        self.configs = {
-            'DeepSeek': {
-                'api_key': '',
-                'base_url': 'https://api.deepseek.com',
-                'model': 'deepseek-chat'
-            },
-            'Kimi': {
-                'api_key': '',
-                'base_url': 'https://api.moonshot.cn/v1',
-                'model': 'moonshot-v1-8k'
-            },
-            'Tongyi': {
-                'api_key': '',
-                'base_url': 'https://api.tongyi.aliyun.com/v1',
-                'model': 'qwen-max'
-            }
-        }
-        
-        # 默认提示词
+        # 初始化属性
+        self.configs = {}
+        self.last_service = ''  # 初始化 last_service 属性
         self.default_prompt = '''你是一个专业的聊天记录总结员，请根据提供的微信群聊天记录生成一个简明的群聊精华总结，重点包括以下内容： 
 1. 重要提醒：提取群聊中提到的任何提醒、禁止事项或重要信息。 
 2. 今日热门话题：总结群聊中讨论过的主要话题，包含讨论时间、内容摘要、参与者以及关键建议或观点。 
@@ -189,14 +172,28 @@ class AIConfig:
                     data = json.load(f)
                     # 合并已保存的配置
                     if 'services' in data:
-                        for service, config in data['services'].items():
-                            if service in self.configs:
-                                self.configs[service].update(config)
-                            else:
-                                self.configs[service] = config
+                        self.configs = data['services']
                     self.default_prompt = data.get('prompt', self.default_prompt)
                     self.last_service = data.get('last_service', '')
             else:
+                # 默认配置
+                self.configs = {
+                    'DeepSeek': {
+                        'api_key': '',
+                        'base_url': 'https://api.deepseek.com',
+                        'model': 'deepseek-chat'
+                    },
+                    'Kimi': {
+                        'api_key': '',
+                        'base_url': 'https://api.moonshot.cn/v1',
+                        'model': 'moonshot-v1-8k'
+                    },
+                    'Tongyi': {
+                        'api_key': '',
+                        'base_url': 'https://api.tongyi.aliyun.com/v1',
+                        'model': 'qwen-max'
+                    }
+                }
                 self.save_configs()
         except Exception as e:
             logger.error(f"加载配置失败: {e}")
@@ -606,7 +603,11 @@ class MainWindow(QMainWindow):
         current_service = self.service_combo.currentText()
         self.update_service_combo()
         self.service_combo.setCurrentText(current_service)
-        QMessageBox.information(self, "成功", f"{service_name} 配置已保存")
+        # 更新状态标签而不是弹窗
+        if hasattr(self, 'status_label') and self.status_label:
+            self.status_label.setText(f"{service_name} 配置已保存")
+            # 2秒后清除状态消息
+            QTimer.singleShot(2000, lambda: self.status_label.setText(""))
         
     def add_custom_service(self):
         """添加自定义AI服务"""
@@ -832,6 +833,3 @@ def main():
 
 if __name__ == "__main__":
     main() 
-
-
-# 打包流程
