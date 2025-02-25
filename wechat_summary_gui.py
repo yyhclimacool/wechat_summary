@@ -235,7 +235,7 @@ class AIServiceConfig:
             'models': ['moonshot-v1-8k', 'moonshot-v1-32k', 'moonshot-v1-128k']
         },
         'Tongyi': {
-            'base_url': 'https://api.tongyi.aliyun.com/v1',
+            'base_url': 'https://dashscope.aliyuncs.com/compatible-mode/v1',
             'models': ['qwen-max', 'qwen-plus', 'qwen-turbo']
         }
     }
@@ -418,8 +418,8 @@ class MainWindow(QMainWindow):
     def create_main_tab(self):
         tab = QWidget()
         layout = QVBoxLayout(tab)
-        layout.setContentsMargins(16, 16, 16, 16)  # 减小边距
-        layout.setSpacing(12)  # 减小间距
+        layout.setContentsMargins(16, 16, 16, 16)
+        layout.setSpacing(12)
         
         # 输入区域容器
         input_container = QWidget()
@@ -438,18 +438,34 @@ class MainWindow(QMainWindow):
         group_layout.addWidget(self.group_name_input)
         input_layout.addWidget(group_widget, 4)
         
-        # 获取小时数
-        hours_widget = QWidget()
-        hours_layout = QVBoxLayout(hours_widget)
-        hours_layout.setContentsMargins(0, 0, 0, 0)
-        hours_layout.setSpacing(5)
-        hours_label = QLabel("获取小时数")
+        # 时间选择区域
+        time_widget = QWidget()
+        time_layout = QVBoxLayout(time_widget)
+        time_layout.setContentsMargins(0, 0, 0, 0)
+        time_layout.setSpacing(5)
+        time_label = QLabel("获取时间范围")
+        
+        time_input_widget = QWidget()
+        time_input_layout = QHBoxLayout(time_input_widget)
+        time_input_layout.setContentsMargins(0, 0, 0, 0)
+        time_input_layout.setSpacing(5)
+        
         self.hours_spin = QSpinBox()
-        self.hours_spin.setRange(1, 24)
+        self.hours_spin.setRange(0, 23)
         self.hours_spin.setValue(1)
-        hours_layout.addWidget(hours_label)
-        hours_layout.addWidget(self.hours_spin)
-        input_layout.addWidget(hours_widget, 1)
+        self.hours_spin.setSuffix(" 小时")
+        
+        self.minutes_spin = QSpinBox()
+        self.minutes_spin.setRange(0, 59)
+        self.minutes_spin.setValue(0)
+        self.minutes_spin.setSuffix(" 分钟")
+        
+        time_input_layout.addWidget(self.hours_spin)
+        time_input_layout.addWidget(self.minutes_spin)
+        
+        time_layout.addWidget(time_label)
+        time_layout.addWidget(time_input_widget)
+        input_layout.addWidget(time_widget, 2)
         
         # AI服务选择
         service_widget = QWidget()
@@ -676,10 +692,15 @@ class MainWindow(QMainWindow):
         """异步获取消息总结"""
         group_name = self.group_name_input.text()
         hours = self.hours_spin.value()
+        minutes = self.minutes_spin.value()
         service_name = self.service_combo.currentText()
         
         if not group_name:
             QMessageBox.warning(self, "警告", "请输入群聊名称")
+            return
+            
+        if hours == 0 and minutes == 0:
+            QMessageBox.warning(self, "警告", "请设置时间范围")
             return
             
         service_config = self.ai_config.get_config(service_name)
@@ -698,9 +719,10 @@ class MainWindow(QMainWindow):
             self.setEnabled(False)
             
             # 创建并启动工作线程
+            total_minutes = hours * 60 + minutes
             self.worker = SummaryWorker(
                 group_name, 
-                hours, 
+                total_minutes / 60,  # 转换为小时
                 service_config,
                 self.prompt_edit.toPlainText()
             )
@@ -833,3 +855,6 @@ def main():
 
 if __name__ == "__main__":
     main() 
+
+
+# 打包流程

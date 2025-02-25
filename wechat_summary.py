@@ -47,9 +47,11 @@ def get_wechat_messages(group_name, hours=None, ai_config=None, prompt=None):
     if hours is None:
         start_time = datetime.datetime.now() - datetime.timedelta(hours=1)
     else:
-        start_time = datetime.datetime.now() - datetime.timedelta(hours=hours)
+        # 支持小数点形式的小时数
+        start_time = datetime.datetime.now() - datetime.timedelta(hours=float(hours))
     
     logger.info(f"开始获取 {start_time} 之后的消息")
+    print(f"开始获取 {start_time} 之后的消息")
     
     all_messages = []
     temp_messages = []
