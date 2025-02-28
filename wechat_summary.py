@@ -69,7 +69,7 @@ def get_wechat_messages(group_name, hours=None, ai_config=None, prompt=None):
                 
             processed_msgs.add(msg_id)
             
-            if msg.type == 'sys':
+            if msg.type == 'time':
                 msg_time = parse_message_time(msg.content)
                 if msg_time and msg_time < start_time:
                     continue_loading = False
