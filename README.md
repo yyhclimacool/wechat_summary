@@ -84,6 +84,9 @@ python wechat_summary_gui.py
 
 ---
 
+## 微信交流群
+![微信交流群](https://wmimg.com/i/1119/2025/02/67c11a05a583f.jpg)
+
 ### 📚 推荐阅读
 
 -   [WeChatAI](https://github.com/Vita0519/WeChatAI)
