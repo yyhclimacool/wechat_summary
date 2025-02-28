@@ -1,5 +1,5 @@
 # 微信群聊总结助手
-
+[项目地址](https://github.com/Vita0519/wechat_summary/)
 一个基于人工智能的微信群聊消息总结工具，支持多种AI服务，可以自动提取群聊重点内容并生成结构化总结。
 
 ## 功能特点
@@ -26,6 +26,12 @@
 ```bash
 pip install -r requirements.txt
 ```
+
+### 运行程序
+```bash
+python wechat_summary_gui.py
+```
+
 ## 使用截图
 ![使用截图](使用截图.png)
 ## 使用说明
@@ -69,18 +75,8 @@ pip install -r requirements.txt
 
 - `wechat_summary.py`：主程序文件
 - `wechat_summary_gui.py`：图形界面文件
-- `deepseekAPI.py`：DeepSeek API文件
 - `config.json`：配置文件
 - `summary`：总结文件夹
-
-## 打包流程
-
-```bash
-pyside6-rcc resources.qrc -o resources.py
-pyarmor gen resources.py wechat_summary.py wechat_summary_gui.py
-cd dist
-dist> pyinstaller --upx-dir "D:\upx" --clean --onefile --hidden-import openai --hidden-import PySide6.QtWidgets --hidden-import PySide6.QtCore --hidden-import PySide6.QtGui --hidden-import wxauto --hidden-import loguru --add-data "pyarmor_runtime_000000;." --add-data "resources.py;." --add-data "wechat_summary.py;." --name=wechat_summary --icon=wechat.ico --windowed --strip wechat_summary_gui.py
-```
 
 ## 联系方式
 
