@@ -275,12 +275,3 @@ if __name__ == "__main__":
             
     except Exception as e:
         logger.error(f"程序执行出错：{str(e)}")
-
-
-
-# 打包流程
-
-# pyside6-rcc resources.qrc -o resources.py
-# pyarmor gen resources.py wechat_summary.py wechat_summary_gui.py
-# cd dist
-# dist> pyinstaller --upx-dir "D:\upx" --clean --onefile --hidden-import openai --hidden-import PySide6.QtWidgets --hidden-import PySide6.QtCore --hidden-import PySide6.QtGui --hidden-import wxauto --hidden-import loguru --add-data "pyarmor_runtime_000000;." --add-data "resources.py;." --add-data "wechat_summary.py;." --name=wechat_summary --icon=wechat.ico --windowed --strip wechat_summary_gui.py
