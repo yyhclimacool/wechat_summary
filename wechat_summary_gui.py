@@ -170,9 +170,16 @@ class AIConfig:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    # 合并已保存的配置
+                    # 合并已保存的配置和服务列表
                     if 'services' in data:
                         self.configs = data['services']
+                        # 更新 AIServiceConfig.SERVICES
+                        for service_name, config in self.configs.items():
+                            if service_name not in AIServiceConfig.SERVICES:
+                                AIServiceConfig.SERVICES[service_name] = {
+                                    'base_url': config['base_url'],
+                                    'models': [config['model']]  # 将当前模型添加到模型列表
+                                }
                     self.default_prompt = data.get('prompt', self.default_prompt)
                     self.last_service = data.get('last_service', '')
             else:
@@ -213,7 +220,14 @@ class AIConfig:
             QMessageBox.warning(None, "警告", f"保存配置失败: {e}")
             
     def add_config(self, name, config):
+        """添加或更新配置"""
         self.configs[name] = config
+        # 同时更新 AIServiceConfig.SERVICES
+        if name not in AIServiceConfig.SERVICES:
+            AIServiceConfig.SERVICES[name] = {
+                'base_url': config['base_url'],
+                'models': [config['model']]
+            }
         self.save_configs()
         
     def remove_config(self, name):
@@ -635,9 +649,6 @@ class MainWindow(QMainWindow):
                 QMessageBox.warning(self, "警告", "所有字段都必须填写")
                 return
                 
-            # 更新服务配置
-            AIServiceConfig.add_service(data['name'], data['base_url'], data['model'])
-            
             # 添加到配置文件
             self.ai_config.add_config(data['name'], {
                 'api_key': data['api_key'],
@@ -649,7 +660,14 @@ class MainWindow(QMainWindow):
             self.update_service_combo()
             self.update_config_cards()
             
-            QMessageBox.information(self, "成功", f"已添加新服务: {data['name']}")
+            # 选中新添加的服务
+            index = self.service_combo.findText(data['name'])
+            if index >= 0:
+                self.service_combo.setCurrentIndex(index)
+            
+            if hasattr(self, 'status_label') and self.status_label:
+                self.status_label.setText(f"已添加新服务: {data['name']}")
+                QTimer.singleShot(2000, lambda: self.status_label.setText(""))
 
     def update_config_cards(self):
         """更新配置卡片显示"""
@@ -855,6 +873,3 @@ def main():
 
 if __name__ == "__main__":
     main() 
-
-
-# 打包流程
