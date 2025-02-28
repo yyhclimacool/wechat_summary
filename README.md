@@ -86,7 +86,7 @@ python wechat_summary_gui.py
 
 ### 📚 推荐阅读
 
--   [无限畅用Cursor 编辑器，四步轻松搞定！](https://www.allfather.top/archives/cursormian-fei-mi-ji-si-bu-jie-suo)
+-   [WeChatAI](https://github.com/Vita0519/WeChatAI)
 -   [历时两周半开发的一款加载live2模型的浏览器插件](https://www.allfather.top/archives/live2dkan-ban-niang)
 -   [github优秀开源作品集](https://www.allfather.top/mol2d/)
 
