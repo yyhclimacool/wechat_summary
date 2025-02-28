@@ -256,8 +256,9 @@ def send_summary(group_name, summary, max_retries=3):
     logger.error(f"发送总结失败，已达到最大重试次数 ({max_retries})")
     return False
 
+
 if __name__ == "__main__":
-    group_name = "大数据开发小组"
+    group_name = "VictorAI交流群"
     
     try:
         summary = get_wechat_messages(group_name, 1)
@@ -275,3 +276,4 @@ if __name__ == "__main__":
             
     except Exception as e:
         logger.error(f"程序执行出错：{str(e)}")
+
