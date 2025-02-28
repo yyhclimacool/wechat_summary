@@ -26,7 +26,8 @@
 ```bash
 pip install -r requirements.txt
 ```
-
+## 使用截图
+![使用截图](使用截图.png)
 ## 使用说明
 
 ### 1. 配置AI服务
