@@ -34,6 +34,9 @@ python wechat_summary_gui.py
 
 ## 使用截图
 ![使用截图](使用截图.png)
+![AI服务](V2/AI服务配置.png)
+![提示词配置](V2/提示词配置)
+
 ## 使用说明
 
 ### 1. 配置AI服务
