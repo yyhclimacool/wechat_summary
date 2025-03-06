@@ -35,7 +35,7 @@ python wechat_summary_gui.py
 ## 使用截图
 ![使用截图](使用截图.png)
 ![AI服务](V2/AI服务配置.png)
-![提示词配置](V2/提示词配置)
+![提示词配置](V2/提示词配置.png)
 
 ## 使用说明
 
@@ -97,13 +97,11 @@ python wechat_summary_gui.py
 
 ---
 
-## 微信交流群
-![微信交流群](https://wmimg.com/i/1119/2025/02/67c11a05a583f.jpg)
-
 ### 📚 推荐阅读
 
 -   [WeChatAI](https://github.com/Vita0519/WeChatAI)
 -   [历时两周半开发的一款加载live2模型的浏览器插件](https://www.allfather.top/archives/live2dkan-ban-niang)
+-   [PySide6+live2d+小智 开发的 AI 语音助手桌面精灵，支持和小智持续对话、音乐播放、番茄时钟、书签跳转、ocr等功能](https://www.bilibili.com/video/BV1wN9rYFEze/?share_source=copy_web&vd_source=f3d1033524bcd51cf10e8312ef8376ff)
 -   [github优秀开源作品集](https://www.allfather.top/mol2d/)
 
 ---
